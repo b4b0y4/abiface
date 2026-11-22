@@ -704,7 +704,6 @@ export class WalletConnect {
          this.setRpcOpen(!this.panel.classList.contains("open")),
        );
        this.setRpcOpen(false);
-       document.getElementById("save-rpc-btn")?.addEventListener("click", () => this.saveRpc());
 
        this.convToggle?.addEventListener("click", () =>
          this.setAccordion(this.convToggle, this.convPanel, !this.convPanel.classList.contains("open")),
@@ -768,33 +767,51 @@ export class WalletConnect {
      /* ---------- rpc ---------- */
 
      static renderRpcInputs() {
+       const SAVE_ICON =
+         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>';
+
        this.inputs?.replaceChildren(
-         ...getRpcConfigurableNetworks().map(([name, config]) =>
-           create(
+         ...getRpcConfigurableNetworks().map(([name, config]) => {
+           const input = create("input", {
+             id: `${name}-rpc`,
+             type: "url",
+             placeholder: "Enter custom RPC URL",
+             value: localStorage.getItem(`${name}-rpc`) || "",
+           });
+           input.addEventListener("keydown", (e) => {
+             if (e.key === "Enter") this.saveRpc(name);
+           });
+
+           const save = create("button", {
+             type: "button",
+             className: "dk-conv-copy",
+             title: `Save ${config.name} RPC`,
+             innerHTML: SAVE_ICON,
+             onclick: () => this.saveRpc(name),
+           });
+           save.setAttribute("aria-label", `Save ${config.name} RPC`);
+
+           return create(
              "div",
-             {},
+             { className: "dk-conv-row" },
              create("label", { textContent: config.name, htmlFor: `${name}-rpc` }),
-             create("input", {
-               id: `${name}-rpc`,
-               type: "url",
-               placeholder: "Enter custom RPC URL",
-               value: localStorage.getItem(`${name}-rpc`) || "",
-             }),
-           ),
-         ),
+             create("div", { className: "dk-conv-field" }, input, save),
+           );
+         }),
        );
      }
 
-     static saveRpc() {
-       getRpcConfigurableNetworks().forEach(([name]) => {
-         const input = document.getElementById(`${name}-rpc`);
-         if (!input) return;
-         const value = input.value.trim();
-         value ? localStorage.setItem(`${name}-rpc`, value) : localStorage.removeItem(`${name}-rpc`);
-       });
-       this.dropdown?.close();
-       this.setRpcOpen(false);
-       notify("RPC settings saved.", "success");
+     static saveRpc(name) {
+       const input = document.getElementById(`${name}-rpc`);
+       if (!input) return;
+       const value = input.value.trim();
+       value ? localStorage.setItem(`${name}-rpc`, value) : localStorage.removeItem(`${name}-rpc`);
+       notify(
+         value
+           ? `${networkConfigs[name].name} RPC saved.`
+           : `${networkConfigs[name].name} RPC reset to default.`,
+         "success",
+       );
      }
    }
 

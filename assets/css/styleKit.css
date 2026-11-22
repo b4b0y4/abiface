@@ -467,67 +467,16 @@ input {
   padding: var(--dk-space-md) var(--dk-space-sm) var(--dk-space-sm);
 }
 
-#rpc-inputs {
-  display: grid;
-  gap: var(--dk-gap-lg);
-}
-
-#rpc-inputs div {
-  display: flex;
-  flex-direction: column;
-  gap: var(--dk-gap-xs);
-}
-
-#rpc-inputs label {
-  font-size: var(--dk-font-sm);
-  color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
-}
-
-#rpc-inputs input {
-  width: 100%;
-  padding: var(--dk-space-md);
-  font-size: var(--dk-font-md);
-  color: var(--dk-color-txt);
-  background-color: var(--dk-connect-color-btn);
-  border: var(--dk-border-medium) solid transparent;
-  border-radius: var(--dk-radius-lg);
-  outline: none;
-}
-
-#rpc-inputs input::placeholder {
-  color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
-  opacity: 1;
-}
-
-#rpc-inputs input:focus {
-  border-color: color-mix(in srgb, var(--dk-color-txt) 25%, transparent);
-}
-
-.dk-save-btn {
-  width: 100%;
-  padding: var(--dk-space-md);
-  font: inherit;
-  font-weight: var(--dk-weight-medium);
-  color: var(--dk-color-txt);
-  background-color: var(--dk-connect-color-btn);
-  border: none;
-  border-radius: var(--dk-radius-lg);
-  cursor: pointer;
-  transition: background-color var(--dk-transition);
-}
-
-.dk-save-btn:hover {
-  background-color: var(--dk-connect-color-hvr);
-}
-
-/* ============================================================
-   COMPONENT: Unit converter
-   ============================================================ */
-
+#rpc-inputs,
 #conv-fields {
   display: grid;
   gap: var(--dk-gap-lg);
 }
+
+/* ============================================================
+   COMPONENT: Field rows (RPC inputs + unit converter)
+   Label on top, input + square action button below
+   ============================================================ */
 
 .dk-conv-row {
   display: flex;
@@ -542,7 +491,7 @@ input {
 
 .dk-conv-field {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: var(--dk-gap-md);
 }
 
@@ -567,10 +516,8 @@ input {
   border-color: color-mix(in srgb, var(--dk-color-txt) 25%, transparent);
 }
 
-.dk-conv-field {
-  display: flex;
-  align-items: stretch;
-  gap: var(--dk-gap-md);
+.dk-conv-field input[aria-invalid="true"] {
+  border-color: rgb(var(--dk-color-red));
 }
 
 .dk-conv-copy {
@@ -584,16 +531,24 @@ input {
   background-color: var(--dk-connect-color-btn);
   border: none;
   border-radius: var(--dk-radius-lg);
+  cursor: pointer;
   transition: background-color var(--dk-transition), opacity var(--dk-transition);
 }
 
-.dk-conv-copy[data-copy]:hover {
+.dk-conv-copy:hover {
   background-color: var(--dk-connect-color-hvr);
 }
 
-.dk-conv-copy:not([data-copy]) {
+.dk-conv-copy svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Converter only: nothing to copy yet */
+#conv-fields .dk-conv-copy:not([data-copy]) {
   opacity: 0.35;
   cursor: default;
+  pointer-events: none;
 }
 
 /* ============================================================
