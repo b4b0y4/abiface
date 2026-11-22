@@ -544,7 +544,6 @@ input {
   height: 16px;
 }
 
-/* Converter only: nothing to copy yet */
 #conv-fields .dk-conv-copy:not([data-copy]) {
   opacity: 0.35;
   cursor: default;
