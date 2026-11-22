@@ -527,16 +527,17 @@ input {
   flex-shrink: 0;
   width: 44px;
   padding: 0;
-  color: var(--dk-color-txt);
+  color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
   background-color: var(--dk-connect-color-btn);
   border: none;
   border-radius: var(--dk-radius-lg);
   cursor: pointer;
-  transition: background-color var(--dk-transition), opacity var(--dk-transition);
+  transition: all var(--dk-transition);
 }
 
 .dk-conv-copy:hover {
   background-color: var(--dk-connect-color-hvr);
+  color: var(--dk-color-txt);
 }
 
 .dk-conv-copy svg {
