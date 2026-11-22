@@ -94,6 +94,11 @@
       }
 
       /* ABI interface */
+      input::placeholder,
+      textarea::placeholder {
+        color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
+        opacity: 1;
+      }
       [hidden] {
         display: none !important;
       }
