@@ -521,6 +521,82 @@ input {
 }
 
 /* ============================================================
+   COMPONENT: Unit converter
+   ============================================================ */
+
+#conv-fields {
+  display: grid;
+  gap: var(--dk-gap-lg);
+}
+
+.dk-conv-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dk-gap-xs);
+}
+
+.dk-conv-row label {
+  font-size: var(--dk-font-sm);
+  color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
+}
+
+.dk-conv-field {
+  display: flex;
+  align-items: center;
+  gap: var(--dk-gap-md);
+}
+
+.dk-conv-field input {
+  flex: 1;
+  min-width: 0;
+  padding: var(--dk-space-md);
+  font-size: var(--dk-font-md);
+  color: var(--dk-color-txt);
+  background-color: var(--dk-connect-color-btn);
+  border: var(--dk-border-medium) solid transparent;
+  border-radius: var(--dk-radius-lg);
+  outline: none;
+}
+
+.dk-conv-field input::placeholder {
+  color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
+  opacity: 1;
+}
+
+.dk-conv-field input:focus {
+  border-color: color-mix(in srgb, var(--dk-color-txt) 25%, transparent);
+}
+
+.dk-conv-field {
+  display: flex;
+  align-items: stretch;
+  gap: var(--dk-gap-md);
+}
+
+.dk-conv-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 44px;
+  padding: 0;
+  color: var(--dk-color-txt);
+  background-color: var(--dk-connect-color-btn);
+  border: none;
+  border-radius: var(--dk-radius-lg);
+  transition: background-color var(--dk-transition), opacity var(--dk-transition);
+}
+
+.dk-conv-copy[data-copy]:hover {
+  background-color: var(--dk-connect-color-hvr);
+}
+
+.dk-conv-copy:not([data-copy]) {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ============================================================
    COMPONENT: Copy
    Remove this section with the Copy block
    ============================================================ */

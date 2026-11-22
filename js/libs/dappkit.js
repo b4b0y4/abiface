@@ -677,66 +677,126 @@ export class WalletConnect {
    and `Settings.mount()` in app.js
    ============================================================ */
 
-export class Settings {
-  static inputs = null;
-  static toggle = null;
-  static panel = null;
-  static dropdown = null;
+   export class Settings {
+     static inputs = null;
+     static toggle = null;
+     static panel = null;
+     static dropdown = null;
+     static convToggle = null;
+     static convPanel = null;
+     static convInputs = [];
+     static units = { wei: 0, gwei: 9, ether: 18 };
 
-  static mount() {
-    const button = document.querySelector("#settings-btn");
-    const menu = document.querySelector("#settings-menu");
-    this.inputs = document.querySelector("#rpc-inputs");
-    this.toggle = document.querySelector("#rpc-toggle");
-    this.panel = document.querySelector("#rpc-panel");
-    if (!button || !menu) return this;
-    this.dropdown = new Dropdown(button, menu);
-    this.renderRpcInputs();
-    this.toggle?.addEventListener("click", () =>
-      this.setRpcOpen(!this.panel.classList.contains("open")),
-    );
-    this.setRpcOpen(false);
-    document.getElementById("save-rpc-btn")?.addEventListener("click", () => this.saveRpc());
-    return this;
-  }
+     static mount() {
+       const button = document.querySelector("#settings-btn");
+       const menu = document.querySelector("#settings-menu");
+       this.inputs = document.querySelector("#rpc-inputs");
+       this.toggle = document.querySelector("#rpc-toggle");
+       this.panel = document.querySelector("#rpc-panel");
+       this.convToggle = document.querySelector("#conv-toggle");
+       this.convPanel = document.querySelector("#conv-panel");
+       this.convInputs = [...document.querySelectorAll("#conv-fields input[data-unit]")];
+       if (!button || !menu) return this;
+       this.dropdown = new Dropdown(button, menu);
 
-  static setRpcOpen(open) {
-    if (!this.panel || !this.toggle) return;
-    this.panel.classList.toggle("open", open);
-    this.panel.inert = !open;
-    this.toggle.setAttribute("aria-expanded", String(open));
-  }
+       this.renderRpcInputs();
+       this.toggle?.addEventListener("click", () =>
+         this.setRpcOpen(!this.panel.classList.contains("open")),
+       );
+       this.setRpcOpen(false);
+       document.getElementById("save-rpc-btn")?.addEventListener("click", () => this.saveRpc());
 
-  static renderRpcInputs() {
-    this.inputs?.replaceChildren(
-      ...getRpcConfigurableNetworks().map(([name, config]) =>
-        create(
-          "div",
-          {},
-          create("label", { textContent: config.name, htmlFor: `${name}-rpc` }),
-          create("input", {
-            id: `${name}-rpc`,
-            type: "url",
-            placeholder: "Enter custom RPC URL",
-            value: localStorage.getItem(`${name}-rpc`) || "",
-          }),
-        ),
-      ),
-    );
-  }
+       this.convToggle?.addEventListener("click", () =>
+         this.setAccordion(this.convToggle, this.convPanel, !this.convPanel.classList.contains("open")),
+       );
+       this.setAccordion(this.convToggle, this.convPanel, false);
+       this.convInputs.forEach((input) =>
+         input.addEventListener("input", () => this.convert(input)),
+       );
+       return this;
+     }
 
-  static saveRpc() {
-    getRpcConfigurableNetworks().forEach(([name]) => {
-      const input = document.getElementById(`${name}-rpc`);
-      if (!input) return;
-      const value = input.value.trim();
-      value ? localStorage.setItem(`${name}-rpc`, value) : localStorage.removeItem(`${name}-rpc`);
-    });
-    this.dropdown?.close();
-    this.setRpcOpen(false);
-    notify("RPC settings saved.", "success");
-  }
-}
+     static setAccordion(toggle, panel, open) {
+       if (!panel || !toggle) return;
+       panel.classList.toggle("open", open);
+       panel.inert = !open;
+       toggle.setAttribute("aria-expanded", String(open));
+     }
+
+     static setRpcOpen(open) {
+       this.setAccordion(this.toggle, this.panel, open);
+     }
+
+     /* ---------- unit converter ---------- */
+
+     static convert(source) {
+       const raw = source.value.trim().replace(/,/g, "");
+       source.removeAttribute("aria-invalid");
+
+       if (!raw) {
+         this.convInputs.forEach((i) => (i.value = ""));
+         return this.syncCopyButtons();
+       }
+
+       try {
+         if (!/^(\d+\.?\d*|\.\d+)$/.test(raw)) throw new Error("invalid");
+         const normalized = (raw.startsWith(".") ? `0${raw}` : raw).replace(/\.$/, "");
+         const wei = ethers.parseUnits(normalized, this.units[source.dataset.unit]);
+         this.convInputs.forEach((i) => {
+           if (i === source) return;
+           i.value = ethers
+             .formatUnits(wei, this.units[i.dataset.unit])
+             .replace(/\.0$/, "");
+         });
+       } catch {
+         source.setAttribute("aria-invalid", "true");
+         this.convInputs.forEach((i) => i !== source && (i.value = ""));
+       }
+       this.syncCopyButtons();
+     }
+
+     static syncCopyButtons() {
+       this.convInputs.forEach((input) => {
+         const btn = input.nextElementSibling;
+         if (!btn) return;
+         const valid = input.value && input.getAttribute("aria-invalid") !== "true";
+         if (valid) btn.dataset.copy = input.value;
+         else btn.removeAttribute("data-copy");
+       });
+     }
+
+     /* ---------- rpc ---------- */
+
+     static renderRpcInputs() {
+       this.inputs?.replaceChildren(
+         ...getRpcConfigurableNetworks().map(([name, config]) =>
+           create(
+             "div",
+             {},
+             create("label", { textContent: config.name, htmlFor: `${name}-rpc` }),
+             create("input", {
+               id: `${name}-rpc`,
+               type: "url",
+               placeholder: "Enter custom RPC URL",
+               value: localStorage.getItem(`${name}-rpc`) || "",
+             }),
+           ),
+         ),
+       );
+     }
+
+     static saveRpc() {
+       getRpcConfigurableNetworks().forEach(([name]) => {
+         const input = document.getElementById(`${name}-rpc`);
+         if (!input) return;
+         const value = input.value.trim();
+         value ? localStorage.setItem(`${name}-rpc`, value) : localStorage.removeItem(`${name}-rpc`);
+       });
+       this.dropdown?.close();
+       this.setRpcOpen(false);
+       notify("RPC settings saved.", "success");
+     }
+   }
 
 /* ============================================================
    CORE: ConnectWallet (headless)

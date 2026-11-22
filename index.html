@@ -407,6 +407,43 @@
                 </div>
               </div>
             </div>
+
+            <!-- Unit converter accordion -->
+            <div class="dk-settings-block">
+              <button id="conv-toggle" class="dk-accordion-btn" type="button" aria-expanded="false" aria-controls="conv-panel">
+                <span>Unit converter</span>
+                <svg class="dk-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </button>
+              <div id="conv-panel" class="dk-accordion-panel">
+                <div class="dk-accordion-inner">
+                  <div id="conv-fields">
+                    <div class="dk-conv-row">
+                      <label for="conv-wei">Wei</label>
+                      <div class="dk-conv-field">
+                        <input id="conv-wei" data-unit="wei" type="text" inputmode="decimal" placeholder="0" autocomplete="off" spellcheck="false" />
+                        <button type="button" class="dk-conv-copy" data-copy="" aria-label="Copy Wei value"></button>
+                      </div>
+                    </div>
+                    <div class="dk-conv-row">
+                      <label for="conv-gwei">Gwei</label>
+                      <div class="dk-conv-field">
+                        <input id="conv-gwei" data-unit="gwei" type="text" inputmode="decimal" placeholder="0" autocomplete="off" spellcheck="false" />
+                        <button type="button" class="dk-conv-copy" data-copy="" aria-label="Copy Gwei value"></button>
+                      </div>
+                    </div>
+                    <div class="dk-conv-row">
+                      <label for="conv-ether">ETH</label>
+                      <div class="dk-conv-field">
+                        <input id="conv-ether" data-unit="ether" type="text" inputmode="decimal" placeholder="0" autocomplete="off" spellcheck="false" />
+                        <button type="button" class="dk-conv-copy" data-copy="" aria-label="Copy ETH value"></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
