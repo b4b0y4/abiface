@@ -5,23 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
     <!-- Primary Meta -->
-    <meta name="title" content="dappkit" />
-    <meta name="description" content="A minimal dependency starter template for decentralized applications." />
+    <meta name="title" content="abiface — ABI interface for any smart contract" />
+    <meta name="description" content="Turn any smart contract into a usable interface. Paste an ABI and contract address to call read functions, send write transactions, and enter payable values in ETH." />
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://b4b0y4.github.io/dappkit/" />
-    <meta property="og:title" content="dappkit" />
-    <meta property="og:description" content="A minimal dependency starter template for decentralized applications." />
-    <meta property="og:image" content="https://b4b0y4.github.io/dappkit/assets/img/dappkit.png" />
+    <meta property="og:url" content="https://abiface.baboya.eth.limo" />
+    <meta property="og:title" content="abiface — ABI interface for any smart contract" />
+    <meta property="og:description" content="Turn any smart contract into a usable interface. Paste an ABI and contract address to call read functions, send write transactions, and enter payable values in ETH." />
+    <meta property="og:image" content="https://abiface.baboya.eth.limo/assets/img/abiface.webp" />
 
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://b4b0y4.github.io/dappkit/" />
-    <meta name="twitter:title" content="dappkit" />
-    <meta name="twitter:description" content="A minimal dependency starter template for decentralized applications." />
-    <meta name="twitter:image" content="https://b4b0y4.github.io/dappkit/assets/img/dappkit.png" />
-    <title>dappkit</title>
+    <meta property="twitter:url" content="https://abiface.baboya.eth.limo" />
+    <meta name="twitter:title" content="abiface — ABI interface for any smart contract" />
+    <meta name="twitter:description" content="Turn any smart contract into a usable interface. Paste an ABI and contract address to call read functions, send write transactions, and enter payable values in ETH." />
+    <meta name="twitter:image" content="https://abiface.baboya.eth.limo/assets/img/abiface.webp" />
+    <title>abiface — ABI interface for any smart contract</title>
     <script>
       (() => {
         const mode = localStorage.themeMode;
@@ -40,6 +40,13 @@
         });
       })();
     </script>
+    </script>
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./assets/img/apple-touch-icon.png"
+    />
     <link rel="stylesheet" href="./assets/css/styleKit.css" />
     <style>
     :root {
@@ -68,24 +75,6 @@
       @media (max-width: 600px) {
         body { padding-bottom: 90px; }
       }
-      /* Demo layout (safe to remove) */
-      .demo {
-        max-width: 500px;
-        margin: 15vh auto;
-        padding: 24px;
-        display: grid;
-        gap: 16px;
-        color: var(--color-txt);
-        background-color: var(--dk-surface);
-        border: var(--dk-border-medium) solid var(--dk-menu-border);
-        border-radius: 20px;
-      }
-      .row {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        align-items: center;
-      }
       .btn {
         color: var(--color-txt);
         border: none;
@@ -98,13 +87,252 @@
         &:hover {
           background-color: var(--dk-connect-color-hvr);
         }
+        &:disabled {
+          opacity: 0.55;
+          cursor: progress;
+        }
+      }
+
+      /* ABI interface */
+      [hidden] {
+        display: none !important;
+      }
+      .abi-app {
+        max-width: 1100px;
+        margin: 30px auto 60px;
+        display: grid;
+        gap: 20px;
+      }
+      .abi-intro h1 {
+        font-size: clamp(1.6rem, 4vw, 2.2rem);
+        letter-spacing: -0.02em;
+      }
+      .abi-intro p {
+        margin-top: 6px;
+        opacity: 0.75;
+      }
+      .abi-panel {
+        display: grid;
+        gap: 16px;
+        padding: 24px;
+        color: var(--color-txt);
+        background-color: var(--dk-surface);
+        border: var(--dk-border-medium) solid var(--dk-menu-border);
+        border-radius: 20px;
+      }
+      .abi-field {
+        display: grid;
+        gap: 6px;
+      }
+      .abi-field label {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: var(--dk-font-14);
+        font-weight: var(--dk-weight-semibold);
+      }
+      .abi-hint {
+        font-size: 12px;
+        font-weight: 400;
+        opacity: 0.6;
+      }
+      .abi-field input,
+      .abi-field textarea,
+      .fn-input,
+      .abi-toolbar input {
+        width: 100%;
+        padding: 10px 12px;
+        color: inherit;
+        font: inherit;
+        background-color: color-mix(in srgb, var(--dk-color-bg) 55%, transparent);
+        border: 1px solid var(--dk-menu-border);
+        border-radius: 8px;
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .abi-field textarea {
+        min-height: 120px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12.5px;
+        line-height: 1.5;
+        resize: vertical;
+      }
+      .abi-field input:focus,
+      .abi-field textarea:focus,
+      .fn-input:focus,
+      .abi-toolbar input:focus {
+        outline: none;
+        border-color: color-mix(in srgb, var(--dk-color-txt) 40%, transparent);
+        box-shadow: 0 0 0 3px color-mix(in srgb, var(--dk-color-txt) 10%, transparent);
+      }
+      .abi-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+      .abi-error {
+        font-size: 14px;
+        color: rgb(var(--dk-color-red));
+      }
+      .abi-summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        font-size: 14px;
+        background-color: var(--dk-surface);
+        border: 1px solid var(--dk-menu-border);
+        border-radius: 12px;
+      }
+      .abi-summary-label {
+        font-weight: var(--dk-weight-semibold);
+      }
+      .abi-address {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        word-break: break-all;
+        cursor: pointer;
+      }
+      .abi-summary-count {
+        margin-left: auto;
+        opacity: 0.65;
+      }
+      .abi-toolbar {
+        display: flex;
+        justify-content: flex-end;
+      }
+      .abi-toolbar input {
+        width: min(100%, 320px);
+        padding: 9px 12px;
+      }
+      .abi-results {
+        display: grid;
+        gap: 24px;
+      }
+      .fn-section {
+        display: grid;
+        gap: 12px;
+      }
+      .fn-heading h2 {
+        font-size: 1.15rem;
+      }
+      .fn-description {
+        margin-top: 2px;
+        font-size: 13px;
+        opacity: 0.65;
+      }
+      .fn-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 14px;
+      }
+      .fn-card {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+        background-color: var(--dk-surface);
+        border: 1px solid var(--dk-menu-border);
+        border-radius: 14px;
+      }
+      .fn-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+      }
+      .fn-name {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 15px;
+        font-weight: var(--dk-weight-bold);
+        word-break: break-all;
+      }
+      .fn-badge {
+        padding: 2px 8px;
+        font-size: 11px;
+        font-weight: var(--dk-weight-semibold);
+        letter-spacing: 0.02em;
+        border-radius: 999px;
+      }
+      .fn-badge-read {
+        color: rgb(var(--dk-color-green));
+        background-color: rgba(var(--dk-color-green), 0.15);
+      }
+      .fn-badge-write {
+        color: rgb(var(--dk-color-blue));
+        background-color: rgba(var(--dk-color-blue), 0.15);
+      }
+      .fn-badge-pay {
+        color: rgb(var(--dk-color-orange));
+        background-color: rgba(var(--dk-color-orange), 0.15);
+      }
+      .fn-signature {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11.5px;
+        opacity: 0.7;
+        word-break: break-word;
+      }
+      .fn-fields {
+        display: grid;
+        gap: 10px;
+      }
+      .fn-field {
+        display: grid;
+        gap: 5px;
+      }
+      .fn-label {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        font-size: 12px;
+        font-weight: var(--dk-weight-medium);
+      }
+      .fn-type {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 11px;
+        opacity: 0.55;
+      }
+      .fn-footer {
+        margin-top: auto;
+      }
+      .fn-action {
+        width: 100%;
+      }
+      .fn-result {
+        max-height: 240px;
+        padding: 10px 12px;
+        overflow: auto;
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        word-break: break-word;
+        background-color: color-mix(in srgb, var(--dk-color-bg) 55%, transparent);
+        border-radius: 8px;
+      }
+      .fn-result-error {
+        color: rgb(var(--dk-color-red));
+      }
+      .abi-empty {
+        opacity: 0.7;
+      }
+      @media (max-width: 600px) {
+        .abi-app {
+          margin-top: 10px;
+        }
+        .abi-panel {
+          padding: 18px;
+        }
+        .fn-grid {
+          grid-template-columns: 1fr;
+        }
       }
     </style>
   </head>
   <body>
     <!-- Top bar -->
     <header class="dk-bar">
-      <div class="dk-brand">DAPPKIT</div>
+      <div class="dk-brand">ABIFACE</div>
 
       <div class="dk-widget">
         <!-- Chain + wallet (moves to its own bottom bar on mobile) -->
@@ -182,37 +410,61 @@
     <!-- Notifications Container -->
     <div id="notificationContainer"></div>
 
-    <!--Demo (safe to remove) -->
-    <div class="demo">
-      <div class="row">
-        <strong>Copy:</strong>
-        <button
-          class="btn"
-          data-copy="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb"
-        >
-          Copy Address
-        </button>
+    <!-- ABI interface -->
+    <main class="abi-app" id="abi-app">
+      <section class="abi-intro">
+        <h1>ABI interface</h1>
+        <p>
+          Paste a contract address and its ABI. Every function becomes a call or
+          send control, with payable amounts entered in ETH.
+        </p>
+      </section>
+
+      <form id="abi-form" class="abi-panel" autocomplete="off">
+        <div class="abi-field">
+          <label for="abi-address">Contract address</label>
+          <input
+            id="abi-address"
+            type="text"
+            placeholder="0x…"
+            spellcheck="false"
+          />
+        </div>
+
+        <div class="abi-field">
+          <label for="abi-input">
+            ABI
+            <span class="abi-hint">JSON array, artifact, or human-readable</span>
+          </label>
+          <textarea
+            id="abi-input"
+            rows="6"
+            placeholder='[{"type":"function","name":"balanceOf","inputs":[{"name":"owner","type":"address"}],"outputs":[{"name":"","type":"uint256"}],"stateMutability":"view"}]'
+            spellcheck="false"
+          ></textarea>
+        </div>
+
+        <div class="abi-actions">
+          <button class="btn" type="submit">Load contract</button>
+          <button class="btn" type="button" id="abi-clear">Clear</button>
+        </div>
+
+        <p id="abi-error" class="abi-error" hidden></p>
+      </form>
+
+      <div id="abi-summary" class="abi-summary" hidden></div>
+
+      <div id="abi-toolbar" class="abi-toolbar" hidden>
+        <input
+          id="abi-filter"
+          type="search"
+          placeholder="Filter functions…"
+          aria-label="Filter functions"
+        />
       </div>
-      <div class="row">
-        <strong>Notifications:</strong>
-        <button class="btn" data-type="success">Success</button>
-        <button class="btn" data-type="info">Info</button>
-        <button class="btn" data-type="warning">Warning</button>
-        <button class="btn" data-type="error">Error</button>
-      </div>
-      <div class="row">
-        <strong>Transaction:</strong>
-        <button class="btn" id="demo-tx">Send Demo TX</button>
-      </div>
-      <div class="row">
-        <a
-          href="https://github.com/b4b0y4/dappkit"
-          target="_blank"
-          style="color: var(--primary-color)"
-          >GitHub</a
-        >
-      </div>
-    </div>
+
+      <div id="abi-results" class="abi-results"></div>
+    </main>
 
     <script type="module" src="./js/app.js"></script>
   </body>
