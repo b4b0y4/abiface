@@ -22,6 +22,7 @@ Turn any smart contract into a usable interface. Paste a contract address and it
 | Arbitrum | 42161 | ETH |
 | Optimism | 10 | ETH |
 | Base | 8453 | ETH |
+| Robinhood | 4663 | ETH |
 
 ## Quick start
 
