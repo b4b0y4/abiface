@@ -1,0 +1,807 @@
+/* ============================================================
+   CSS VARIABLES
+   ============================================================ */
+
+:root {
+  /* Spacing / gaps / radii */
+  --dk-space-sm: 7.5px;
+  --dk-space-md: 10px;
+  --dk-space-lg: 15px;
+  --dk-space-xl: 20px;
+
+  --dk-gap-xs: 4px;
+  --dk-gap-sm: 5px;
+  --dk-gap-md: 8px;
+  --dk-gap-lg: 10px;
+
+  --dk-radius-md: 6px;
+  --dk-radius-lg: 8px;
+  --dk-radius-xl: 10px;
+  --dk-radius-round: 50%;
+
+  /* Typography */
+  --dk-font-sm: 0.9em;
+  --dk-font-md: 1em;
+  --dk-font-12: 12px;
+  --dk-font-14: 14px;
+  --dk-font-16: 16px;
+  --dk-font-20: 20px;
+
+  --dk-weight-medium: 500;
+  --dk-weight-semibold: 600;
+  --dk-weight-bold: bold;
+
+  /* Dimensions */
+  --dk-btn-height: 40px;
+  --dk-icon-xs: 10px;
+  --dk-icon-md: 24px;
+  --dk-icon-lg: 26px;
+  --dk-icon-xl: 32px;
+  --dk-border-thin: 1px;
+  --dk-border-medium: 2px;
+
+  /* Opacity */
+  --dk-opacity-60: 0.6;
+  --dk-opacity-70: 0.7;
+  --dk-opacity-80: 0.8;
+  --dk-opacity-90: 0.9;
+
+  /* Motion / layering */
+  --dk-transition: 0.3s ease;
+  --dk-transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --dk-z-modal: 1000;
+  --dk-anim-pulse: 1.5s;
+  --dk-anim-spin: 0.8s;
+
+  /* Notification colors (RGB triplets) */
+  --dk-color-blue: 75, 186, 231;
+  --dk-color-green: 46, 204, 113;
+  --dk-color-orange: 255, 165, 0;
+  --dk-color-red: 234, 51, 35;
+
+  /* Notification */
+  --dk-notif-max-width: 500px;
+  --dk-notif-bottom: 20px;
+  --dk-notif-left: 20px;
+  --dk-notif-padding: 15px;
+  --dk-notif-border-size: 4px;
+  --dk-notif-progress-height: 3px;
+
+  /* Bar / menu layout */
+  --dk-bar-h: 56px;
+  --dk-bar-gap: 5px;
+  --dk-menu-max: 640px;
+
+  /* Theme aliases (set by the page) */
+  --dk-color-txt: var(--color-txt, #17202a);
+  --dk-color-bg: var(--color-bg, #f5f5f5);
+
+  /* Surfaces (light) */
+  --dk-surface: color-mix(in srgb, var(--dk-color-bg) 70%, white 30%);
+  --dk-connect-color-btn: color-mix(in srgb, var(--dk-color-bg) 95%, black 5%);
+  --dk-connect-color-hvr: color-mix(in srgb, var(--dk-color-bg) 90%, black 10%);
+  --dk-bar-bg: color-mix(in srgb, var(--dk-surface) 30%, transparent);
+  --dk-menu-border: color-mix(in srgb, var(--dk-color-txt) 14%, transparent);
+}
+
+:root[data-theme="dark"] {
+  --dk-surface: color-mix(in srgb, var(--dk-color-bg) 60%, black 40%);
+  --dk-connect-color-btn: color-mix(in srgb, var(--dk-color-bg) 90%, black 10%);
+  --dk-connect-color-hvr: color-mix(in srgb, var(--dk-color-bg) 99%, black 1%);
+  --dk-menu-border: color-mix(in srgb, var(--dk-color-txt) 12%, transparent);
+}
+
+/* ============================================================
+   GLOBAL RESETS
+   ============================================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+/* ============================================================
+   COMPONENT: Top bar
+   ============================================================ */
+
+.dk-bar::before,
+.dk-group::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--dk-bar-bg);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+}
+
+.dk-bar {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + var(--dk-bar-gap));
+  left: calc(env(safe-area-inset-left, 0px) + var(--dk-bar-gap));
+  right: calc(env(safe-area-inset-right, 0px) + var(--dk-bar-gap));
+  z-index: 900;
+  height: var(--dk-bar-h);
+  padding: 0 var(--dk-space-md) 0 var(--dk-space-xl);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 20px;
+  user-select: none;
+}
+
+.dk-brand {
+  font-size: var(--dk-font-20);
+  font-weight: var(--dk-weight-bold);
+  letter-spacing: 0.08em;
+  color: var(--dk-color-txt);
+}
+
+.dk-widget,
+.dk-group {
+  display: flex;
+  align-items: center;
+  gap: var(--dk-gap-md);
+}
+
+.dk-group::before {
+  display: none;
+}
+
+.dk-dropdown {
+  position: relative;
+}
+
+.dk-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--dk-gap-md);
+  height: var(--dk-btn-height);
+  padding: 0 var(--dk-space-md);
+  font-size: var(--dk-font-md);
+  color: var(--dk-color-txt);
+  background-color: transparent;
+  border: var(--dk-border-medium) solid transparent;
+  border-radius: var(--dk-radius-xl);
+  cursor: pointer;
+  transition:
+    background-color var(--dk-transition),
+    border-color var(--dk-transition);
+}
+
+.dk-btn:hover {
+  border-color: color-mix(in srgb, var(--dk-color-txt) 25%, transparent);
+}
+
+.dk-btn[aria-expanded="true"] {
+  background-color: var(--dk-surface);
+}
+
+.dk-btn:focus-visible {
+  outline: var(--dk-border-medium) solid currentColor;
+  outline-offset: 2px;
+}
+
+.dk-chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  opacity: var(--dk-opacity-60);
+  transition: transform var(--dk-transition);
+}
+
+.dk-btn[aria-expanded="true"] .dk-chevron,
+.dk-accordion-btn[aria-expanded="true"] .dk-chevron {
+  transform: rotate(180deg);
+}
+
+.dk-icon-btn {
+  width: var(--dk-btn-height);
+  padding: 0;
+  border-radius: var(--dk-radius-round);
+}
+
+.dk-icon-btn:hover {
+  border-color: transparent;
+  background-color: var(--dk-connect-color-btn);
+}
+
+.dk-icon-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ============================================================
+   COMPONENT: Dropdown menus
+   Max 640px wide on mobile, fill the screen between the bars
+   ============================================================ */
+
+.dk-menu {
+  position: absolute;
+  top: calc(100% + (var(--dk-bar-h) - var(--dk-btn-height)) / 2 + var(--dk-bar-gap));
+  right: 0;
+  z-index: var(--dk-z-modal);
+  width: max-content;
+  min-width: 220px;
+  max-width: 320px;
+  max-height: calc(
+    100dvh - var(--dk-bar-h) - var(--dk-bar-gap) * 4 -
+      env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)
+  );
+  padding: var(--dk-space-md);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background-color: var(--dk-surface);
+  border: var(--dk-border-medium) solid var(--dk-menu-border);
+  border-radius: 20px;
+  opacity: 0;
+  transform: scale(0.97);
+  transform-origin: top right;
+  pointer-events: none;
+  transition:
+    opacity var(--dk-transition),
+    transform var(--dk-transition);
+}
+
+.dk-chain-menu {
+  right: auto;
+  left: 0;
+  transform-origin: top left;
+}
+
+.dk-settings-menu {
+  min-width: 260px;
+}
+
+.dk-menu.show {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.dk-menu-item,
+.dk-accordion-btn,
+.dk-get-wallet a {
+  display: flex;
+  align-items: center;
+  gap: var(--dk-gap-lg);
+  width: 100%;
+  padding: var(--dk-space-lg);
+  font: inherit;
+  color: var(--dk-color-txt);
+  text-align: left;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  border-radius: var(--dk-radius-xl);
+  cursor: pointer;
+  transition: background-color var(--dk-transition);
+}
+
+.dk-menu-item:hover,
+.dk-accordion-btn:hover,
+.dk-get-wallet a:hover {
+  background-color: var(--dk-connect-color-btn);
+}
+
+.dk-menu-item[hidden] {
+  display: none;
+}
+
+.dk-accordion-btn {
+  justify-content: space-between;
+}
+
+.dk-get-wallet a {
+  justify-content: center;
+}
+
+.dk-item-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* ============================================================
+   COMPONENT: ChainSelect + WalletConnect
+   ============================================================ */
+
+.dk-chain-btn img {
+  width: 22px;
+  height: 22px;
+}
+
+.dk-chain-btn #chain-btn-label {
+  max-width: 120px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.dk-chain-btn img,
+.dk-chain-item img,
+.dk-connect-btn.name-resolved img {
+  border-radius: var(--dk-radius-round);
+  flex-shrink: 0;
+}
+
+.dk-chain-item img,
+.dk-wallet-item img,
+.dk-connect-btn.name-resolved img {
+  width: 28px;
+  height: 28px;
+}
+
+.dk-wallet-item img {
+  border-radius: var(--dk-radius-md);
+  flex-shrink: 0;
+}
+
+.dk-connect-label {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.resolved-name {
+  display: inline-block;
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+
+.dk-wallet-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dk-dot {
+  width: var(--dk-icon-xs);
+  height: var(--dk-icon-xs);
+  background-color: rgb(var(--dk-color-green));
+  border-radius: var(--dk-radius-round);
+  flex-shrink: 0;
+  animation: connect-pulse var(--dk-anim-pulse) ease-out infinite;
+}
+
+.dk-chain-item .dk-dot,
+.dk-wallet-item .dk-dot {
+  display: none;
+}
+
+.dk-chain-item.active .dk-dot,
+.dk-wallet-item.active .dk-dot {
+  display: block;
+}
+
+@keyframes connect-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(var(--dk-color-green), 0.5); }
+  70%  { box-shadow: 0 0 0 var(--dk-gap-xs) rgba(var(--dk-color-green), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--dk-color-green), 0); }
+}
+
+.dk-copy-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  opacity: var(--dk-opacity-60);
+}
+
+/* ============================================================
+   COMPONENT: Settings + Theme
+   ============================================================ */
+
+.dk-theme-segment {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  padding: 3px;
+  margin-bottom: var(--dk-gap-lg);
+  background-color: var(--dk-connect-color-btn);
+  border-radius: var(--dk-radius-xl);
+}
+
+.dk-theme-segment button {
+  padding: var(--dk-space-md) var(--dk-space-sm);
+  font: inherit;
+  font-size: var(--dk-font-sm);
+  color: var(--dk-color-txt);
+  background: transparent;
+  border: none;
+  border-radius: var(--dk-radius-lg);
+  cursor: pointer;
+  opacity: var(--dk-opacity-70);
+  transition:
+    background-color var(--dk-transition),
+    opacity var(--dk-transition);
+}
+
+.dk-theme-segment button:hover {
+  opacity: 1;
+}
+
+.dk-theme-segment button.active {
+  opacity: 1;
+  background-color: var(--dk-surface);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.dk-settings-block {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--dk-gap-sm);
+}
+
+.dk-accordion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+}
+
+.dk-accordion-panel.open {
+  grid-template-rows: 1fr;
+}
+
+.dk-accordion-inner {
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dk-gap-lg);
+}
+
+.dk-accordion-panel.open .dk-accordion-inner {
+  padding: var(--dk-space-md) var(--dk-space-sm) var(--dk-space-sm);
+}
+
+#rpc-inputs {
+  display: grid;
+  gap: var(--dk-gap-lg);
+}
+
+#rpc-inputs div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dk-gap-xs);
+}
+
+#rpc-inputs label {
+  font-size: var(--dk-font-sm);
+  color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
+}
+
+#rpc-inputs input {
+  width: 100%;
+  padding: var(--dk-space-md);
+  font-size: var(--dk-font-md);
+  color: var(--dk-color-txt);
+  background-color: var(--dk-connect-color-btn);
+  border: var(--dk-border-medium) solid transparent;
+  border-radius: var(--dk-radius-lg);
+  outline: none;
+}
+
+#rpc-inputs input::placeholder {
+  color: color-mix(in srgb, var(--dk-color-txt) 45%, transparent);
+  opacity: 1;
+}
+
+#rpc-inputs input:focus {
+  border-color: color-mix(in srgb, var(--dk-color-txt) 25%, transparent);
+}
+
+.dk-save-btn {
+  width: 100%;
+  padding: var(--dk-space-md);
+  font: inherit;
+  font-weight: var(--dk-weight-medium);
+  color: var(--dk-color-txt);
+  background-color: var(--dk-connect-color-btn);
+  border: none;
+  border-radius: var(--dk-radius-lg);
+  cursor: pointer;
+  transition: background-color var(--dk-transition);
+}
+
+.dk-save-btn:hover {
+  background-color: var(--dk-connect-color-hvr);
+}
+
+/* ============================================================
+   COMPONENT: Copy
+   Remove this section with the Copy block
+   ============================================================ */
+
+[data-copy] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dk-gap-md);
+  cursor: pointer;
+  user-select: none;
+}
+
+[data-copy] svg {
+  opacity: var(--dk-opacity-60);
+  transition:
+    opacity var(--dk-transition),
+    stroke var(--dk-transition);
+}
+
+[data-copy] svg:hover {
+  opacity: var(--dk-opacity-80);
+}
+
+.copy-success svg,
+.copy-error svg {
+  opacity: 1;
+}
+
+/* ============================================================
+   COMPONENT: Notifications
+   Remove this section with the Notification block
+   ============================================================ */
+
+#notificationContainer {
+  position: fixed;
+  bottom: var(--dk-notif-bottom);
+  left: var(--dk-notif-left);
+  z-index: var(--dk-z-modal);
+  max-width: var(--dk-notif-max-width);
+  display: flex;
+  flex-direction: column;
+  gap: var(--dk-gap-lg);
+  pointer-events: none;
+}
+
+.notification {
+  position: relative;
+  max-width: 100%;
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: all var(--dk-transition-bounce);
+  pointer-events: auto;
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification.info,
+.notification.tx-notification.pending {
+  --dk-notif-color: var(--dk-color-blue);
+}
+
+.notification.success,
+.notification.tx-notification.success {
+  --dk-notif-color: var(--dk-color-green);
+}
+
+.notification.warning {
+  --dk-notif-color: var(--dk-color-orange);
+}
+
+.notification.error,
+.notification.tx-notification.failed {
+  --dk-notif-color: var(--dk-color-red);
+}
+
+.notif-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dk-gap-lg);
+  padding: var(--dk-notif-padding);
+  font-size: var(--dk-font-16);
+  font-weight: var(--dk-weight-medium);
+  color: color-mix(in srgb, var(--dk-color-txt) 60%, transparent);
+  background-color: var(--dk-connect-color-btn);
+  border-left: var(--dk-notif-border-size) solid rgb(var(--dk-notif-color));
+  border-radius: var(--dk-radius-lg);
+  overflow: hidden;
+}
+
+.notif-close {
+  position: relative;
+  display: block;
+  width: var(--dk-icon-md);
+  height: var(--dk-icon-md);
+  padding: 0;
+  font-size: 0;
+  line-height: 0;
+  appearance: none;
+  color: currentColor;
+  background: none;
+  border: none;
+  border-radius: var(--dk-radius-round);
+  cursor: pointer;
+  transition: background-color var(--dk-transition);
+  flex-shrink: 0;
+}
+
+.notif-close::before,
+.notif-close::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 2px;
+  background-color: currentColor;
+  border-radius: 1px;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+.notif-close::before { rotate: 45deg; }
+.notif-close::after  { rotate: -45deg; }
+
+.notif-close:focus-visible {
+  outline: var(--dk-border-thin) solid currentColor;
+  outline-offset: 2px;
+}
+
+.notif-close:hover {
+  background-color: rgba(var(--dk-notif-color), 0.2);
+}
+
+.progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--dk-notif-progress-height);
+  background-color: rgb(var(--dk-notif-color));
+  transform-origin: left center;
+  animation: notif-progress linear forwards;
+  pointer-events: none;
+}
+
+@keyframes notif-progress {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+.tx-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dk-icon-xl);
+  height: var(--dk-icon-xl);
+  flex-shrink: 0;
+  color: rgb(var(--dk-notif-color));
+}
+
+.tx-notification.success .tx-icon::before,
+.tx-notification.failed .tx-icon::before {
+  font-size: var(--dk-font-20);
+  font-weight: var(--dk-weight-bold);
+}
+
+.tx-notification.success .tx-icon::before { content: "✓"; }
+.tx-notification.failed .tx-icon::before  { content: "✗"; }
+
+.tx-spinner {
+  width: var(--dk-space-xl);
+  height: var(--dk-space-xl);
+  border: var(--dk-border-medium) solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--dk-radius-round);
+  animation: tx-spin var(--dk-anim-spin) linear infinite;
+}
+
+@keyframes tx-spin {
+  to { transform: rotate(360deg); }
+}
+
+.tx-details {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dk-gap-xs);
+}
+
+.tx-label {
+  font-size: var(--dk-font-14);
+  font-weight: var(--dk-weight-semibold);
+}
+
+.tx-hash {
+  font-size: var(--dk-font-12);
+  opacity: var(--dk-opacity-80);
+}
+
+.tx-hash a {
+  color: inherit;
+  text-decoration: none;
+  transition: opacity var(--dk-transition);
+}
+
+.tx-hash a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+.tx-status {
+  margin-left: var(--dk-gap-md);
+  font-size: var(--dk-font-12);
+  font-weight: var(--dk-weight-medium);
+  opacity: var(--dk-opacity-90);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN
+   Mobile: chain + wallet move to their own bottom bar
+   ============================================================ */
+
+@media (max-width: 600px) {
+  .dk-group {
+    position: fixed;
+    z-index: 1;
+    left: calc(env(safe-area-inset-left, 0px) + var(--dk-bar-gap));
+    right: calc(env(safe-area-inset-right, 0px) + var(--dk-bar-gap));
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--dk-bar-gap));
+    height: var(--dk-bar-h);
+    padding: 0 var(--dk-space-md);
+    justify-content: space-between;
+    border-radius: 20px;
+  }
+
+  .dk-group::before {
+    display: block;
+  }
+
+  .dk-menu {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + var(--dk-bar-gap) * 2 + var(--dk-bar-h));
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--dk-bar-gap) * 2 + var(--dk-bar-h));
+    left: calc(env(safe-area-inset-left, 0px) + var(--dk-bar-gap));
+    right: calc(env(safe-area-inset-right, 0px) + var(--dk-bar-gap));
+    width: auto;
+    min-width: 0;
+    max-width: var(--dk-menu-max);
+    max-height: none;
+    margin-inline: auto;
+    border: none;
+    transform-origin: top center;
+  }
+
+  #notificationContainer {
+    left: var(--dk-space-md);
+    right: var(--dk-space-md);
+    bottom: calc(env(safe-area-inset-bottom, 0px) + var(--dk-bar-gap) * 3 + var(--dk-bar-h));
+    max-width: none;
+  }
+
+  .notif-content {
+    padding: 12px 16px;
+    font-size: var(--dk-font-14);
+  }
+
+  .tx-icon {
+    width: var(--dk-icon-lg);
+    height: var(--dk-icon-lg);
+  }
+
+  .tx-spinner {
+    width: 16px;
+    height: 16px;
+  }
+}
